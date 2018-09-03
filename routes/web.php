@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\NewTimeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +13,9 @@
 |
 */
 
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('main');
 });
+
+Route::post('add-new-time', 'NewTimeController@newTime');
