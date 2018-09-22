@@ -9,7 +9,13 @@
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     </head>
     <body>
-        <div id="main" data-times={{ $times ?? null }}></div>
-        <script defer src="{{ asset('js/app.js') }}"></script>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <h2>Ain't using this page for now.</h2>
+                    <a href="/home" class="btn btn-primary">Click here</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

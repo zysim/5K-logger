@@ -17,15 +17,16 @@ class NewTimeController extends Controller
      *
      * @return RedirectResponse
      */
-    public function newTime(Request $request) {
+    public function newTime(Request $request)
+    {
         // Capture the data in a new model, and save it
-        // $time = new Time();
-        // foreach ($request->all() as $key => $value) {
-        //     if ($key === "_token") continue;
-        //     $time[$key] = $value;
-        // }
-        // $time->save();
-        dd($request->all());
+        $time = new Time();
+        foreach ($request->all() as $key => $value) {
+            if ($key === "_token") continue;
+            $time[$key] = $value;
+        }
+        dd($time);
+        $time->save();
         return redirect()->back();
     }
 }
