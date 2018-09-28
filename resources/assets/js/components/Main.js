@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
 import AddTimeForm from "./AddTimeForm";
-import Time from "./Time";
+import TimeList from "./TimeList";
 
+// Unused for now. Meant to test out prop flow
 const testTimes = [
     {
         id: 1,
@@ -42,15 +43,6 @@ export default class Main extends Component {
 
     render() {
         // Check if we have times to display
-        let times;
-        if (!this.props.times || !this.props.times.map) {
-            times = testTimes.map(time => <Time time={time} key={time.id} />);
-        } else {
-            times = this.props.times.map(time => (
-                <Time time={time} key={time.id} />
-            ));
-        }
-
         return (
             <div className="container">
                 <div className="row">
@@ -60,10 +52,7 @@ export default class Main extends Component {
                 </div>
                 <div className="row">
                     <div className="col-md-8 offset-md-2">
-                        <div className="card">
-                            <div className="card-header">List of Times</div>
-                            {times}
-                        </div>
+                        <TimeList />
                     </div>
                 </div>
             </div>

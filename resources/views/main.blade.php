@@ -17,5 +17,8 @@
                 </div>
             </div>
         </div>
+        <script>
+            location.href = "{{ route('home') }}";
+        </script>
     </body>
 </html>

@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreStart
 
 use Illuminate\Foundation\Inspiring;
 

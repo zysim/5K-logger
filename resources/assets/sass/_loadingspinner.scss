@@ -1,0 +1,75 @@
+// The start of the stylesheet for the TimeList component.
+
+#tracker\:spinner__container {
+    --container-height: 500px;
+    --container-grid-column: calc(1 / 3 * var(--container-height));
+    --container-grid-row: calc(1 / 9 * var(--container-height));
+    --mine-gap: 6px;
+    display: grid;
+    width: 100%;
+    height: 300px;
+    grid-template-columns: auto var(--container-grid-column) auto;
+    grid-template-rows: auto var(--container-grid-row) auto;
+    background: #eee;
+}
+
+#tracker\:spinner__dot_container {
+    --mine-borders: calc(var(--mine-gap) / 2);
+    --dot-height: var(--container-grid-row);
+    --dot-small: calc(var(--dot-height) / 4);
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: var(--mine-borders) 1fr var(--mine-borders);
+    grid-column-gap: var(--mine-gap);
+    grid-column: 2/2;
+    grid-row: 2/2;
+}
+
+.tracker\:spinner__dot {
+    width: 100%;
+    height: 100%;
+    background: black;
+    border-radius: 50%;
+    grid-row: 2/2;
+    animation-name: dot-anim;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.tracker\:spinner__dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.tracker\:spinner__dot:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.tracker\:spinner__dot:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes dot-anim {
+    0% {
+        margin-left: 0px;
+        margin-top: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    20% {
+        margin-left: var(--dot-small);
+        margin-top: var(--dot-small);
+        width: 50%;
+        height: 50%;
+    }
+
+    40% {
+        margin-left: 0px;
+        margin-top: 0px;
+        width: 100%;
+        height: 100%;
+    }
+}

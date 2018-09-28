@@ -12,7 +12,8 @@ require("./bootstrap");
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require("./components/Main");
-require("./components/Time");
 require("./components/AddTimeForm");
 require("./components/LapInput");
+require("./components/Main");
+require("./components/Time");
+require("./components/TimeList");

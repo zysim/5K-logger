@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreStart
 
 use Illuminate\Http\Request;
 
@@ -11,8 +12,20 @@ use Illuminate\Http\Request;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api', 'throttle:60,1')->group(function() {
+    Route::get('/user', function(Request $request) {
+        return $request->user();
+    });
+
+    Route::get('add-new-time', function () {
+        return redirect('home');
+    });
+    Route::post('add-new-time', 'NewTimeController@newTime')->name('addNew');
+
+    Route::get('/get-time', function() {
+        return redirect('home');
+    });
+    Route::get('/get-time?{id}', 'GetTimeController@getTime');
 });

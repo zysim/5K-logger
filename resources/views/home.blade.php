@@ -10,7 +10,7 @@
             </div>
             @endif
 
-            <div id="main" data-times={{ $times ?? null }}></div>
+            <div id="main"></div>
             <script defer src="{{ asset('js/app.js') }}"></script>
         </div>
     </div>

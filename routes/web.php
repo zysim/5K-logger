@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\NewTimeController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,13 +11,25 @@ use App\Http\Controllers\NewTimeController;
 |
  */
 
+Route::view('/', 'main')->name('main');
 
-Route::get('/', function () {
-    return view('main');
+// Authentication routes
+Route::namespace('Auth')->group(function() {
+    Route::get('/login', 'LoginController@showLoginForm')->name('login');
+    Route::post('/login', 'LoginController@login');
+
+    Route::get('/register', 'RegisterController@showRegistrationForm')->name('register');
+    Route::post('/register', 'RegisterController@register');
+
+    Route::get('/logout', 'LoginController@logout')->name('logout');
+
+    Route::name('password.')->group(function() {
+        Route::get('/reset-password/{token?}', 'ResetPasswordController@showResetForm')->name('request');
+    });
+    Route::post('/reset-password', 'ResetPasswordController@reset');
 });
 
-Route::post('add-new-time', 'NewTimeController@newTime')->name('addNew');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+// Routes for when I'm signed in
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+});

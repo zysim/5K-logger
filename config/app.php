@@ -121,7 +121,7 @@ return [
 
     'providers' => [
 
-        /*
+    /*
      * Laravel Framework Service Providers...
      */
         Illuminate\Auth\AuthServiceProvider::class,
@@ -150,6 +150,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Defenestrator\Laravel5\CouchDb\CouchDbServiceProvider::class,
 
         /*
          * Application Service Providers...
