@@ -58,7 +58,9 @@ React won't update unless you run `npm run dev`. So don't keep refreshing your b
 
 ## TODO
 
--   Make adding run times work
+-   Read up CouchDB doc querying so I can list all docs
+-   Restructure laptimes listing in TimeList
+-   Make update time docs work
 -   Literally everything else
 -   Finish this README (you know this won't happen)
 -   Eat dinner

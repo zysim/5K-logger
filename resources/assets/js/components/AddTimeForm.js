@@ -26,7 +26,7 @@ export default class AddTimeForm extends Component {
             return <span>Lmao</span>;
         }
         return (
-            <form action="/add-new-time" method="post">
+            <form action="/add-time" method="post">
                 <input
                     type="hidden"
                     name="_token"
