@@ -19,13 +19,13 @@ Route::middleware('auth:api', 'throttle:60,1')->group(function() {
         return $request->user();
     });
 
-    Route::get('add-new-time', function () {
+    Route::get('add-time', function () {
         return redirect('home');
     });
-    Route::post('add-new-time', 'NewTimeController@newTime')->name('addNew');
+    Route::post('add-time', 'TimeController@addTime')->name('addTime');
 
     Route::get('/get-time', function() {
         return redirect('home');
     });
-    Route::get('/get-time?{id}', 'GetTimeController@getTime');
+    Route::get('/get-time?{id}', 'TimeController@getTime');
 });
