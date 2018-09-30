@@ -19,7 +19,7 @@ Route::get('/user', function(Request $request) {
 })->middleware('auth:api', 'throttle:60,1');
 
 
-Route::middleware('auth.basic', 'throttle:60,1')->group(function() {
+Route::middleware('auth.basic.once', 'throttle:60,1')->group(function() {
     Route::get('/add-time', function () {
         return redirect('home');
     });
