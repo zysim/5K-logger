@@ -13808,7 +13808,7 @@ var AddTimeForm = function (_Component) {
             }
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 "form",
-                { action: "/add-new-time", method: "post" },
+                { action: "/add-time", method: "post" },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
                     type: "hidden",
                     name: "_token",
@@ -14298,15 +14298,16 @@ var TimeList = function (_Component) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                _context.prev = 0;
-                                _context.next = 3;
-                                return __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get("/get-time/" + id, {
+                                console.log("Fetching");
+                                _context.prev = 1;
+                                _context.next = 4;
+                                return __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get("/api/get-time/" + id, {
                                     headers: {
                                         "Content-Type": "application/json"
                                     }
                                 });
 
-                            case 3:
+                            case 4:
                                 response = _context.sent;
                                 time = response.data;
                                 // Check if the component has unmounted before updating state
@@ -14315,20 +14316,22 @@ var TimeList = function (_Component) {
                                     time: _extends({}, time),
                                     isFetching: false
                                 });
-                                _context.next = 11;
+                                _context.next = 13;
                                 break;
 
-                            case 8:
-                                _context.prev = 8;
-                                _context.t0 = _context["catch"](0);
+                            case 9:
+                                _context.prev = 9;
+                                _context.t0 = _context["catch"](1);
+
+                                !this.isCancelled && this.setState({ isFetching: false, hasError: true });
                                 throw _context.t0;
 
-                            case 11:
+                            case 13:
                             case "end":
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[0, 8]]);
+                }, _callee, this, [[1, 9]]);
             }));
 
             function fetchDocument(_x) {
@@ -14352,6 +14355,7 @@ var TimeList = function (_Component) {
         key: "componentDidMount",
         value: function componentDidMount() {
             // Fetch the test document
+            // TODO: Need to fetch all documents COUCHDB DOCS
             var testDocument = "91fa5c917d9312d68258034fbf000c54";
             this.fetchDocument(testDocument);
         }
@@ -14364,17 +14368,18 @@ var TimeList = function (_Component) {
     }, {
         key: "componentDidCatch",
         value: function componentDidCatch(error, info) {
-            console.error("In componentDidCatch:", error);
-            this.setState({ hasError: true });
+            console.error("TimeList error:", error, info);
+            this.setState({ isFetching: false, hasError: true });
         }
     }, {
         key: "render",
         value: function render() {
-            if (this.isCancelled) {
+            // If there's an error
+            if (this.state.hasError) {
                 return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                     "span",
                     null,
-                    "Removing"
+                    "Error lol"
                 );
             }
             // Run the spinner if we're still fetching shit
@@ -38251,27 +38256,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-// Unused for now. Meant to test out prop flow
-var testTimes = [{
-    id: 1,
-    runDate: "2018-01-01",
-    lap1: "00:00",
-    lap2: "12:30",
-    lap3: "23:59"
-}, {
-    id: 2,
-    runDate: "2018-01-02",
-    lap1: "00:00",
-    lap2: "12:30",
-    lap3: "23:59"
-}, {
-    id: 3,
-    runDate: "2018-01-03",
-    lap1: "00:00",
-    lap2: "12:30",
-    lap3: "23:69"
-}];
-
 var Main = function (_Component) {
     _inherits(Main, _Component);
 
@@ -38289,6 +38273,7 @@ var Main = function (_Component) {
     _createClass(Main, [{
         key: "componentDidCatch",
         value: function componentDidCatch(error, info) {
+            console.log("Error", error, info);
             this.setState({ hasError: true });
         }
     }, {

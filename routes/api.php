@@ -14,18 +14,19 @@ use Illuminate\Http\Request;
 |
  */
 
-Route::middleware('auth:api', 'throttle:60,1')->group(function() {
-    Route::get('/user', function(Request $request) {
-        return $request->user();
-    });
+Route::get('/user', function(Request $request) {
+    return $request->user();
+})->middleware('auth:api', 'throttle:60,1');
 
-    Route::get('add-time', function () {
+
+Route::middleware('auth.basic', 'throttle:60,1')->group(function() {
+    Route::get('/add-time', function () {
         return redirect('home');
     });
-    Route::post('add-time', 'TimeController@addTime')->name('addTime');
+    Route::post('/add-time', 'TimeController@addTime')->name('addTime');
 
-    Route::get('/get-time', function() {
+    Route::get('/get-time', function () {
         return redirect('home');
     });
-    Route::get('/get-time?{id}', 'TimeController@getTime');
+    Route::get('/get-time/{id}', 'TimeController@getTime');
 });

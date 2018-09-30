@@ -43,7 +43,6 @@ class TimeController extends Controller
     public function __construct()
     {
         $this->_connection = DB::connection('couchdb');
-        $this->middleware('auth');
     }
 
     /**
@@ -70,35 +69,38 @@ class TimeController extends Controller
     /**
      * Gets the time and sends the time to React to be rendered to the front.
      *
-     * @param string $id The document Id.
+     * @param Request $request The request
+     * @param string  $id      The document Id.
      *
      * @return JsonResponse The JSON of the document if `$id` is valid. Otherwise, a
      *                      404 error with a JSON object containing an error message
      *                      is supplied.
      */
-    public function getTime(string $id)
+    public function getTime(Request $request, string $id)
     {
         // Get the document by ID, then work on the response body
         // TODO: Use a query to find the document instead
         try {
-            $doc = $this->_connection->findDocument($id)->body;
+            $doc = $this->_connection->findDocument($id);
+            $body = $doc->body;
             // If document doesn't exist, throw an Exception
-            if (empty($doc)) {
+            if (empty($body)) {
                 throw new Exception("No such document");
             }
-            $data = $this->_extractData($doc);
+            $data = $this->_extractData($body);
 
             return response()->json($data, 200);
         } catch (Exception $e) {
+            // Send the error to the frontend
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }
 
     /**
      * Updates the existing time document.
-     * 
+     *
      * @param Request $request The request containing the doc to update
-     * 
+     *
      * @return RedirectResponse
      */
     public function updateTime(Request $request)
@@ -130,7 +132,7 @@ class TimeController extends Controller
         // Compact lap times into an array
         return array_values($laps);
     }
-    
+
     /**
      * Prepares the document to be sent to React.
      *
@@ -153,7 +155,7 @@ class TimeController extends Controller
     /**
      * Gets a UUID for creating a new time document.
      * This takes Str::uuid and removes the dashes that method creates.
-     * 
+     *
      * @return string A UUID
      */
     private function _getUuid()

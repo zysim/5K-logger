@@ -13,6 +13,7 @@ export default class Main extends Component {
     }
 
     componentDidCatch(error, info) {
+        console.log("Error", error, info);
         this.setState({ hasError: true });
     }
 

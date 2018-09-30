@@ -11,8 +11,9 @@ export default class TimeList extends Component {
      * @param string id The ID of the Time document to fetch
      */
     async fetchDocument(id) {
+        console.log("Fetching");
         try {
-            const response = await axios.get(`/get-time?${id}`, {
+            const response = await axios.get(`/api/get-time/${id}`, {
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -25,7 +26,8 @@ export default class TimeList extends Component {
                     isFetching: false
                 });
         } catch (error) {
-            // Throw the error to the catch guard
+            !this.isCancelled &&
+                this.setState({ isFetching: false, hasError: true });
             throw error;
         }
     }
@@ -48,13 +50,14 @@ export default class TimeList extends Component {
     }
 
     componentDidCatch(error, info) {
-        console.error("In componentDidCatch:", error);
-        this.setState({ hasError: true });
+        console.error("TimeList error:", error, info);
+        this.setState({ isFetching: false, hasError: true });
     }
 
     render() {
-        if (this.isCancelled) {
-            return <span>Removing</span>;
+        // If there's an error
+        if (this.state.hasError) {
+            return <span>Error lol</span>;
         }
         // Run the spinner if we're still fetching shit
         if (this.state.isFetching) {
