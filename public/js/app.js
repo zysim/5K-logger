@@ -14416,7 +14416,7 @@ var TimeList = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            // Fetch the test document
+            // Fetch the test documents
             // TODO: Need to fetch all documents COUCHDB DOCS
             var testDocuments = ["6f9a16fd8e4d84cfcbf90455df0035b8", "6f9a16fd8e4d84cfcbf90455df003f03", "91fa5c917d9312d68258034fbf000c54"];
             Promise.all(testDocuments.map(function (d) {
