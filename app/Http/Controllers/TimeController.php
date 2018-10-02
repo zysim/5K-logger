@@ -61,9 +61,9 @@ class TimeController extends Controller
             'lap_times' => $lapTimes
         ];
         $connection = $this->_connection;
-        $connection->postDocument($document);
+        [$id, $rev] = $connection->postDocument($document);
         // TODO: check for errors
-        return redirect()->back();
+        return response()->json(['id' => $id], 200);
     }
 
     /**
@@ -160,6 +160,6 @@ class TimeController extends Controller
      */
     private function _getUuid()
     {
-        return Utilities::str_replace('-', Str::uuid());
+        return Utilities::str_remove('-', (string)Str::uuid());
     }
 }

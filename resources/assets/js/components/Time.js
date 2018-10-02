@@ -7,23 +7,16 @@ import React from "react";
 export default function Time(props) {
     const time = props.time;
     return (
-        <div className="row px-3 py-2">
-            <div className="col-md-12">
-                <div className="row">
-                    <div className="col-md-12">
-                        <h4>{time.runDate || "Empty"}</h4>
+        <div className="time_container">
+            <h4 className="time_header">{time.runDate || "Empty"}</h4>
+            {(time.lapTimes &&
+                time.lapTimes.map((lap, i) => (
+                    <div className="time_body" key={i}>
+                        <div>Lap {i}</div>
+                        <div>{lap}</div>
                     </div>
-                </div>
-                {(time.lapTimes &&
-                    time.lapTimes.map((lap, i) => (
-                        <div className="row" key={i}>
-                            <div className="col-md-2">Lap {i}</div>
-                            <div className="col-md-2">{lap}</div>
-                        </div>
-                    ))) ||
-                    ""}
-            </div>
-            <hr />
+                ))) ||
+                ""}
         </div>
     );
 }

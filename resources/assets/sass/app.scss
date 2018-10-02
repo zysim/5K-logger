@@ -6,7 +6,7 @@
 
 // Bootstrap
 // Commenting this out so I can style it on my own
-// @import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/bootstrap";
 
 .navbar-laravel {
     background-color: #fff;
@@ -15,10 +15,22 @@
 
 @import "loadingspinner";
 
-.container {
+#time_list_container {
     display: grid;
 
-    &.main {
-        grid-template: 1fr 3fr / 1fr;
+    #time_list_body {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+
+        .time_container {
+            .time_body {
+                display: flex;
+                justify-content: space-between;
+
+                &:nth-child(2) {
+                    flex-grow: 2;
+                }
+            }
+        }
     }
 }

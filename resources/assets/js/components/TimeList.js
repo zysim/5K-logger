@@ -11,7 +11,6 @@ export default class TimeList extends Component {
      * @param string id The ID of the Time document to fetch
      */
     async fetchDocument(id) {
-        console.log("Fetching");
         try {
             const response = await axios.get(`/api/get-time/${id}`, {
                 headers: {
@@ -19,12 +18,7 @@ export default class TimeList extends Component {
                 }
             });
             const time = response.data;
-            // Check if the component has unmounted before updating state
-            !this.isCancelled &&
-                this.setState({
-                    time: { ...time },
-                    isFetching: false
-                });
+            return time;
         } catch (error) {
             !this.isCancelled &&
                 this.setState({ isFetching: false, hasError: true });
@@ -34,14 +28,26 @@ export default class TimeList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { time: {}, hasError: false, isFetching: true };
+        this.state = { times: [], hasError: false, isFetching: true };
     }
 
     componentDidMount() {
-        // Fetch the test document
+        // Fetch the test documents
         // TODO: Need to fetch all documents COUCHDB DOCS
-        const testDocument = "91fa5c917d9312d68258034fbf000c54";
-        this.fetchDocument(testDocument);
+        const testDocuments = [
+            "6f9a16fd8e4d84cfcbf90455df0035b8",
+            "6f9a16fd8e4d84cfcbf90455df003f03",
+            "91fa5c917d9312d68258034fbf000c54"
+        ];
+        Promise.all(testDocuments.map(d => this.fetchDocument(d))).then(
+            times => {
+                !this.isCancelled &&
+                    this.setState({
+                        times: [...times],
+                        isFetching: false
+                    });
+            }
+        );
     }
 
     componentWillUnmount() {
@@ -63,13 +69,17 @@ export default class TimeList extends Component {
         if (this.state.isFetching) {
             return <LoadingSpinner />;
         }
+        const times = this.state.times;
         return (
-            <div className="card">
-                <div className="card-header">List of Times</div>
-                {/* {this.props.times.map(time => (
-                    <Time time={time} key={time.id} />
-                ))} */}
-                <Time time={this.state.time} />
+            <div className="card" id="time_list_container">
+                <div className="card-header" id="time_list_header">
+                    List of Times
+                </div>
+                <div className="card-body" id="time_list_body">
+                    {(times &&
+                        times.map((time, i) => <Time time={time} key={i} />)) ||
+                        ""}
+                </div>
             </div>
         );
     }

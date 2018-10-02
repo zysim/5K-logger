@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import ReactDOM from "react-dom";
 
 import AddTimeForm from "./AddTimeForm";
@@ -13,14 +13,14 @@ export default class Main extends Component {
     }
 
     componentDidCatch(error, info) {
-        console.log("Error", error, info);
+        console.error("Error received:", error, info);
         this.setState({ hasError: true });
     }
 
     render() {
         // Check if we have times to display
         return (
-            <div className="container">
+            <Fragment>
                 <div className="row">
                     <div className="col-md-8 offset-md-2">
                         <AddTimeForm csrfToken={this.props.csrfToken} />
@@ -31,7 +31,7 @@ export default class Main extends Component {
                         <TimeList />
                     </div>
                 </div>
-            </div>
+            </Fragment>
         );
     }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 import LapInput from "./LapInput";
 
@@ -10,7 +11,7 @@ export default class AddTimeForm extends Component {
         super(props);
         this.state = {
             hasError: false,
-            numberOfLaps: 3
+            numberOfLaps: 1
         };
     }
 
@@ -21,12 +22,31 @@ export default class AddTimeForm extends Component {
         console.error(info);
     }
 
+    /**
+     * Makes the post request to add a new time and stuff.
+     */
+    async addTime(ev) {
+        try {
+            ev.preventDefault();
+            const data = new FormData(ev.target);
+            const response = await axios.post("/api/add-time", data);
+            console.log(response.data);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     render() {
         if (this.state.hasError) {
             return <span>Lmao</span>;
         }
         return (
-            <form action="/add-time" method="post">
+            <form
+                action="/api/add-time"
+                method="post"
+                id="tracker:form__add_time"
+                onSubmit={this.addTime.bind(this)}
+            >
                 <input
                     type="hidden"
                     name="_token"
