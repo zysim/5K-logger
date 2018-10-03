@@ -13807,6 +13807,15 @@ var AddTimeForm = function (_Component) {
         }
 
         /**
+         * Adds a new lap to add times to
+         */
+        // addLap() {
+        //     this.setState((prevState, prop) => ({
+        //         numberOfLaps: prevState.numberOfLaps++
+        //     }));
+        // }
+
+        /**
          * Makes the post request to add a new time and stuff.
          */
 
@@ -13902,19 +13911,15 @@ var AddTimeForm = function (_Component) {
                         )
                     ),
                     Array.apply(undefined, _toConsumableArray(Array(this.state.numberOfLaps))).map(function (_, i) {
-                        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__LapInput__["default"], { number: i + 1, key: i.toString() });
+                        return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__LapInput__["default"], { number: i, key: i.toString() });
                     }),
                     __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                         "div",
                         { className: "row px-3 py-1" },
                         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                             "div",
-                            { className: "col-md-1" },
-                            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("input", {
-                                type: "submit",
-                                className: "pull-right",
-                                value: "Add"
-                            })
+                            { className: "col-md-1 pull-right" },
+                            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("input", { type: "submit", value: "Add" })
                         )
                     )
                 )
@@ -14308,8 +14313,30 @@ function LapInput(props) {
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "div",
-            { className: "col-md-8" },
-            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "time", name: name, id: id, step: "1", required: true })
+            { className: "col-md-8", id: id },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+                className: "lap_input_time",
+                type: "number",
+                name: name + "_m",
+                required: true
+            }),
+            "m",
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+                className: "lap_input_time",
+                type: "number",
+                max: "59",
+                name: name + "_s",
+                required: true
+            }),
+            "s",
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
+                className: "lap_input_time",
+                type: "number",
+                max: "999",
+                name: name + "_ms",
+                required: true
+            }),
+            "ms"
         )
     );
 }
@@ -14327,7 +14354,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Time__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__LoadingSpinner__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__LoadingSpinner__ = __webpack_require__(66);
 
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14418,7 +14445,7 @@ var TimeList = function (_Component) {
 
             // Fetch the test documents
             // TODO: Need to fetch all documents COUCHDB DOCS
-            var testDocuments = ["6f9a16fd8e4d84cfcbf90455df0035b8", "6f9a16fd8e4d84cfcbf90455df003f03", "91fa5c917d9312d68258034fbf000c54"];
+            var testDocuments = ["007333028290df033ff1f2e5440034f7", "007333028290df033ff1f2e544003e96", "007333028290df033ff1f2e544004c27"];
             Promise.all(testDocuments.map(function (d) {
                 return _this2.fetchDocument(d);
             })).then(function (times) {
@@ -14486,51 +14513,220 @@ var TimeList = function (_Component) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["default"] = Time;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__timearray__ = __webpack_require__(65);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
 
 
 /**
  * This component holds the list of run dates and their corresponding times.
  * @param {any} props The array of times to list out
  */
-function Time(props) {
-    var time = props.time;
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "div",
-        { className: "time_container" },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            "h4",
-            { className: "time_header" },
-            time.runDate || "Empty"
-        ),
-        time.lapTimes && time.lapTimes.map(function (lap, i) {
+
+var Time = function (_Component) {
+    _inherits(Time, _Component);
+
+    function Time(props) {
+        _classCallCheck(this, Time);
+
+        // There may be a general override for summary rendering
+        var _this = _possibleConstructorReturn(this, (Time.__proto__ || Object.getPrototypeOf(Time)).call(this, props));
+
+        _this.state = {
+            summarise: _this.props.summarise || true,
+            totalAndMean: null
+        };
+        return _this;
+    }
+
+    _createClass(Time, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            // Calculate the total and mean times once it's mounted
+            this.setState({
+                totalAndMean: this.getTotalAndMean(this.props.time.lapTimes)
+            });
+        }
+    }, {
+        key: "componentWillUnmount",
+        value: function componentWillUnmount() {
+            this.isCancelled = true;
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            var _this2 = this;
+
+            var time = this.props.time;
+            var view = void 0;
+            if (time.lapTimes && this.state.summarise && this.state.totalAndMean) {
+                var total = this.state.totalAndMean.total;
+                var mean = this.state.totalAndMean.mean;
+                // Render a view that shows total and mean times
+                view = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    "div",
+                    { className: "time_body" },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "div",
+                        { className: "time_body_item" },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "div",
+                            null,
+                            "Total:"
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "div",
+                            null,
+                            this.stringify(total)
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "div",
+                        { className: "time_body_item" },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "div",
+                            null,
+                            "Average:"
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "div",
+                            null,
+                            this.stringify(mean)
+                        )
+                    )
+                );
+            } else if (time.lapTimes) {
+                // Render a list of individual lap times
+                // time.lapTimes = [[<minutes>, <seconds>, <milliseconds>], ...]
+                view = time.lapTimes.map(function (t, i) {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "div",
+                        { className: "time_body time_body_item", key: i },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "div",
+                            null,
+                            "Lap ",
+                            i
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            "div",
+                            null,
+                            _this2.stringify(t)
+                        )
+                    );
+                });
+            } else {
+                // Component was unmounted or something I guess
+                view = "";
+            }
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 "div",
-                { className: "time_body", key: i },
+                { className: "time_container" },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "div",
-                    null,
-                    "Lap ",
-                    i
+                    "h4",
+                    { className: "time_header" },
+                    time.runDate || "Empty"
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     "div",
                     null,
-                    lap
-                )
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        "button",
+                        {
+                            className: "mx-auto",
+                            onClick: this.toggleSummary.bind(this)
+                        },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("span", {
+                            className: this.state.summarise ? "summary" : "detailed"
+                        })
+                    )
+                ),
+                view
             );
-        }) || ""
-    );
-}
+        }
+
+        /**
+         * Toggles rendering the summary view and the detail view.
+         */
+
+    }, {
+        key: "toggleSummary",
+        value: function toggleSummary() {
+            this.setState(function (prevState) {
+                return {
+                    summarise: !prevState.summarise
+                };
+            });
+        }
+
+        /**
+         * Calculates the total and mean time from the array of individual lap times.
+         *
+         * @param times{Number[][]} The array of individual lap times to calculate
+         *
+         * @return {Number[]} The total and mean times, in that order
+         */
+
+    }, {
+        key: "getTotalAndMean",
+        value: function getTotalAndMean(times) {
+            var t = [];
+            // Get the total for each time element and push to the array
+
+            var _loop = function _loop(i) {
+                var element = times.map(function (time) {
+                    return time[i];
+                }).reduce(function (sum, t) {
+                    return sum + t;
+                });
+                t.push(element);
+            };
+
+            for (var i = 0; i < times[0].length; i++) {
+                _loop(i);
+            }
+            // Tidy it up
+            var total = __WEBPACK_IMPORTED_MODULE_1__timearray__["a" /* default */].apply(null, t);
+            var mean = Object(__WEBPACK_IMPORTED_MODULE_1__timearray__["b" /* divide */])(total, times.length);
+            return { total: total, mean: mean };
+        }
+
+        /**
+         * Renders a time array to a readable string
+         *
+         * @param time{Number[]} The time array
+         *
+         * @return string A string representing the time for the frontend
+         */
+
+    }, {
+        key: "stringify",
+        value: function stringify(time) {
+            return time[0] + "m " + time[1] + "." + time[2] + "s";
+        }
+    }]);
+
+    return Time;
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Time);
 
 /***/ }),
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(24);
-module.exports = __webpack_require__(66);
+module.exports = __webpack_require__(67);
 
 
 /***/ }),
@@ -57050,6 +57246,58 @@ module.exports = camelize;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["b"] = divide;
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+// TimeArray.js
+/* harmony default export */ __webpack_exports__["a"] = (function (minutes, seconds, milliseconds) {
+    // Create a time object, seal it, tidy it up, and return
+    var t = TimeArray(minutes, seconds, milliseconds);
+    Object.seal(t);
+    return t._get();
+});
+
+/**
+ * Divides the TimeArray by `dividend`
+ */
+function divide(timearray, dividend) {
+    if (!dividend) {
+        throw new Error("Tried dividing by 0 or NaN");
+    }
+    var t = TimeArray.call.apply(TimeArray, [null].concat(_toConsumableArray(timearray)));
+    t.internal = Math.round(t.internal / dividend);
+    return t._get();
+}
+
+function TimeArray(minutes, seconds, milliseconds) {
+    return {
+        internal: minutes * 60000 + seconds * 1000 + milliseconds,
+        /**
+         * Prepares the time object to be released into the world
+         */
+        _get: function _get() {
+            var ms = 0,
+                s = 0,
+                m = 0;
+            if (this.internal > 999) {
+                ms = this.internal % 1000;
+                s = ~~(this.internal / 1000);
+            }
+            if (s > 59) {
+                // Get minutes first
+                m = ~~(s / 60);
+                s = s % 60;
+            }
+            return [m, s, ms];
+        }
+    };
+}
+
+/***/ }),
+/* 66 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = LoadingSpinner;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
@@ -57070,7 +57318,7 @@ function LoadingSpinner(props) {
 }
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

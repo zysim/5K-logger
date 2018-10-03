@@ -23,6 +23,15 @@ export default class AddTimeForm extends Component {
     }
 
     /**
+     * Adds a new lap to add times to
+     */
+    // addLap() {
+    //     this.setState((prevState, prop) => ({
+    //         numberOfLaps: prevState.numberOfLaps++
+    //     }));
+    // }
+
+    /**
      * Makes the post request to add a new time and stuff.
      */
     async addTime(ev) {
@@ -64,16 +73,20 @@ export default class AddTimeForm extends Component {
                     </div>
 
                     {Array(...Array(this.state.numberOfLaps)).map((_, i) => {
-                        return <LapInput number={i + 1} key={i.toString()} />;
+                        return <LapInput number={i} key={i.toString()} />;
                     })}
 
-                    <div className="row px-3 py-1">
+                    {/* <div className="row">
                         <div className="col-md-1">
-                            <input
-                                type="submit"
-                                className="pull-right"
-                                value="Add"
-                            />
+                            <button onClick={this.addLap.bind(this)}>
+                                Add more
+                            </button>
+                        </div>
+                    </div> */}
+
+                    <div className="row px-3 py-1">
+                        <div className="col-md-1 pull-right">
+                            <input type="submit" value="Add" />
                         </div>
                     </div>
                 </div>

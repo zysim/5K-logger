@@ -35,9 +35,9 @@ export default class TimeList extends Component {
         // Fetch the test documents
         // TODO: Need to fetch all documents COUCHDB DOCS
         const testDocuments = [
-            "6f9a16fd8e4d84cfcbf90455df0035b8",
-            "6f9a16fd8e4d84cfcbf90455df003f03",
-            "91fa5c917d9312d68258034fbf000c54"
+            "007333028290df033ff1f2e5440034f7",
+            "007333028290df033ff1f2e544003e96",
+            "007333028290df033ff1f2e544004c27"
         ];
         Promise.all(testDocuments.map(d => this.fetchDocument(d))).then(
             times => {
