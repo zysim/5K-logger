@@ -34,20 +34,21 @@ export default class TimeList extends Component {
     componentDidMount() {
         // Fetch the test documents
         // TODO: Need to fetch all documents COUCHDB DOCS
-        const testDocuments = [
-            "007333028290df033ff1f2e5440034f7",
-            "007333028290df033ff1f2e544003e96",
-            "007333028290df033ff1f2e544004c27"
-        ];
-        Promise.all(testDocuments.map(d => this.fetchDocument(d))).then(
-            times => {
+        const uri = "/api/get-time/all";
+        axios
+            .get(uri, {
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => {
                 !this.isCancelled &&
                     this.setState({
-                        times: [...times],
+                        times: response.data,
                         isFetching: false
                     });
-            }
-        );
+            })
+            .catch(error => {
+                throw error;
+            });
     }
 
     componentWillUnmount() {

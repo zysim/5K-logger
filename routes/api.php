@@ -28,5 +28,6 @@ Route::middleware('auth.basic.once', 'throttle:60,1')->group(function() {
     Route::get('/get-time', function () {
         return redirect('home');
     });
-    Route::get('/get-time/{id}', 'TimeController@getTime');
+    Route::get('/get-time/{id}', 'TimeController@getTimeById')->where('id', '^[a-zA-Z0-9]{32}$');
+    Route::get('/get-time/all', 'TimeController@getAllTimes');
 });

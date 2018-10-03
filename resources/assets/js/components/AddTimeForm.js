@@ -11,7 +11,7 @@ export default class AddTimeForm extends Component {
         super(props);
         this.state = {
             hasError: false,
-            numberOfLaps: 1
+            numberOfLaps: 15
         };
     }
 
@@ -39,7 +39,6 @@ export default class AddTimeForm extends Component {
             ev.preventDefault();
             const data = new FormData(ev.target);
             const response = await axios.post("/api/add-time", data);
-            console.log(response.data);
         } catch (error) {
             throw error;
         }
@@ -68,7 +67,12 @@ export default class AddTimeForm extends Component {
                             <label htmlFor="#run-date">Date of run</label>
                         </div>
                         <div className="col-md-8">
-                            <input type="date" name="run_date" id="run-date" />
+                            <input
+                                type="date"
+                                name="run_date"
+                                id="run-date"
+                                required
+                            />
                         </div>
                     </div>
 

@@ -46,24 +46,22 @@ class TimeController extends Controller
     }
 
     /**
-     * Records the new set of times.
+     * Records the new set of times to the database.
      *
      * @param Request $request The request containing the data
      *
-     * @return RedirectResponse
+     * @return void
      */
     public function addTime(Request $request)
     {
         $lapTimes = $this->_compactLapTimes($request);
         $document = [
             'id' => $this->_getUuid(),
-            'run_date' => $request->input('run_date'),
-            'lap_times' => $lapTimes
+            'runDate' => $request->input('run_date'),
+            'lapTimes' => $lapTimes
         ];
-        $connection = $this->_connection;
-        [$id, $rev] = $connection->postDocument($document);
+        $this->_connection->postDocument($document);
         // TODO: check for errors
-        return response()->json(['id' => $id], 200);
     }
 
     /**
@@ -76,7 +74,7 @@ class TimeController extends Controller
      *                      404 error with a JSON object containing an error message
      *                      is supplied.
      */
-    public function getTime(Request $request, string $id)
+    public function getTimeById(Request $request, string $id)
     {
         // Get the document by ID, then work on the response body
         // TODO: Use a query to find the document instead
@@ -91,6 +89,37 @@ class TimeController extends Controller
 
             return response()->json($data, 200);
         } catch (Exception $e) {
+            // Send the error to the frontend
+            return response()->json(['error' => $e->getMessage()], 404);
+        }
+    }
+
+    /**
+     * Gets all times from the design document.
+     *
+     * @param Request $request The request object
+     *
+     * @return JsonResponse The list of all time docs, or a 404 error
+     */
+    public function getAllTimes(Request $request)
+    {
+        try {
+            $limit = 20;
+            // Execute the design doc view
+            $query = $this->_connection->createViewQuery('times', 'times');
+            $result = $query->execute()->toArray();
+            // Rename the result keys for the frontend
+            $times = array_map(
+                function ($time) {
+                    return [
+                        'runDate' => $time['key'],
+                        'lapTimes' => $time['value']
+                    ];
+                },
+                $result
+            );
+            return response()->json($times, 200);
+        } catch (Excpetion $e) {
             // Send the error to the frontend
             return response()->json(['error' => $e->getMessage()], 404);
         }
@@ -127,10 +156,15 @@ class TimeController extends Controller
             },
             ARRAY_FILTER_USE_KEY
         );
-        // Ensure lap times are sorted
-        ksort($laps);
-        // Compact lap times into an array
-        return array_values($laps);
+        // Push [<lap_i_m>, <lap_i_s>, <lap_i_ms>] into $r
+        // Key order and the fact it's all in threes is already ensured.
+        // So we can just do the for loop
+        $r = [];
+        $v = array_values($laps);
+        for ($i = 0; $i < count($v); $i += 3) {
+            array_push($r, [intval($v[$i]), intval($v[$i+1]), intval($v[$i+2])]);
+        }
+        return $r;
     }
 
     /**

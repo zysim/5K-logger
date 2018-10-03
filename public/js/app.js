@@ -13792,7 +13792,7 @@ var AddTimeForm = function (_Component) {
 
         _this.state = {
             hasError: false,
-            numberOfLaps: 1
+            numberOfLaps: 15
         };
         return _this;
     }
@@ -13837,22 +13837,20 @@ var AddTimeForm = function (_Component) {
 
                             case 5:
                                 response = _context.sent;
-
-                                console.log(response.data);
-                                _context.next = 12;
+                                _context.next = 11;
                                 break;
 
-                            case 9:
-                                _context.prev = 9;
+                            case 8:
+                                _context.prev = 8;
                                 _context.t0 = _context["catch"](0);
                                 throw _context.t0;
 
-                            case 12:
+                            case 11:
                             case "end":
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[0, 9]]);
+                }, _callee, this, [[0, 8]]);
             }));
 
             function addTime(_x) {
@@ -13907,7 +13905,12 @@ var AddTimeForm = function (_Component) {
                         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                             "div",
                             { className: "col-md-8" },
-                            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("input", { type: "date", name: "run_date", id: "run-date" })
+                            __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("input", {
+                                type: "date",
+                                name: "run_date",
+                                id: "run-date",
+                                required: true
+                            })
                         )
                     ),
                     Array.apply(undefined, _toConsumableArray(Array(this.state.numberOfLaps))).map(function (_, i) {
@@ -14359,8 +14362,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14445,15 +14446,26 @@ var TimeList = function (_Component) {
 
             // Fetch the test documents
             // TODO: Need to fetch all documents COUCHDB DOCS
-            var testDocuments = ["007333028290df033ff1f2e5440034f7", "007333028290df033ff1f2e544003e96", "007333028290df033ff1f2e544004c27"];
-            Promise.all(testDocuments.map(function (d) {
-                return _this2.fetchDocument(d);
-            })).then(function (times) {
+            var uri = "/api/get-time/all";
+            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(uri, {
+                headers: { "Content-Type": "application/json" }
+            }).then(function (response) {
                 !_this2.isCancelled && _this2.setState({
-                    times: [].concat(_toConsumableArray(times)),
+                    times: response.data,
                     isFetching: false
                 });
+            }).catch(function (error) {
+                throw error;
             });
+            // Promise.all(testDocuments.map(d => this.fetchDocument(d))).then(
+            //     times => {
+            //         !this.isCancelled &&
+            //             this.setState({
+            //                 times: [...times],
+            //                 isFetching: false
+            //             });
+            //     }
+            // );
         }
     }, {
         key: "componentWillUnmount",
