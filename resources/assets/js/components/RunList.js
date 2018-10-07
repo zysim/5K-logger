@@ -1,24 +1,24 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import Time from "./Time";
+import Run from "./Run";
 import LoadingSpinner from "./LoadingSpinner";
 
-export default class TimeList extends Component {
+export default class RunList extends Component {
     /**
      * This fetches a document with `id`.
      *
-     * @param string id The ID of the Time document to fetch
+     * @param string id The ID of the Run document to fetch
      */
     async fetchDocument(id) {
         try {
-            const response = await axios.get(`/api/get-time/${id}`, {
+            const response = await axios.get(`/api/get-run/${id}`, {
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
-            const time = response.data;
-            return time;
+            const run = response.data;
+            return run;
         } catch (error) {
             !this.isCancelled &&
                 this.setState({ isFetching: false, hasError: true });
@@ -28,11 +28,11 @@ export default class TimeList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { times: [], hasError: false, isFetching: true };
+        this.state = { runs: [], hasError: false, isFetching: true };
     }
 
     componentDidMount() {
-        const uri = "/api/get-time/all";
+        const uri = "/api/get-run/all";
         axios
             .get(uri, {
                 headers: { "Content-Type": "application/json" }
@@ -40,7 +40,7 @@ export default class TimeList extends Component {
             .then(response => {
                 !this.isCancelled &&
                     this.setState({
-                        times: response.data,
+                        runs: response.data,
                         isFetching: false
                     });
             })
@@ -55,7 +55,7 @@ export default class TimeList extends Component {
     }
 
     componentDidCatch(error, info) {
-        console.error("TimeList caught an error:");
+        console.error("RunList caught an error:");
         console.error(error);
         this.setState({ isFetching: false, hasError: true });
     }
@@ -67,7 +67,7 @@ export default class TimeList extends Component {
             this.fetchDocument(currentRunDeets.id).then(run => {
                 !this.isCancelled &&
                     this.setState(prevState => ({
-                        times: prevState.times.concat(run)
+                        runs: prevState.runs.concat(run)
                     }));
             });
         }
@@ -82,20 +82,20 @@ export default class TimeList extends Component {
         if (this.state.isFetching) {
             return <LoadingSpinner />;
         }
-        // Check if times exist and has elements to show
-        const times =
-            this.state.times && this.state.times.length > 0
-                ? this.state.times
+        // Check if runs exist and has elements to show
+        const runs =
+            this.state.runs && this.state.runs.length > 0
+                ? this.state.runs
                 : null;
         return (
-            <div className="card" id="time_list_container">
-                <div className="card-header" id="time_list_header">
-                    List of Times
+            <div className="card" id="run_list_container">
+                <div className="card-header" id="run_list_header">
+                    List of Runs
                 </div>
-                <div className="card-body" id="time_list_body">
-                    {(times &&
-                        times.map((time, i) => <Time time={time} key={i} />)) ||
-                        "No times to show"}
+                <div className="card-body" id="run_list_body">
+                    {(runs &&
+                        runs.map((run, i) => <Run run={run} key={i} />)) ||
+                        "No runs to show"}
                 </div>
             </div>
         );

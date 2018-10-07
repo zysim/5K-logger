@@ -2,7 +2,7 @@
 
 /**
  * PHP version 7.3
- * TimeController.
+ * RunController.
  *
  * @category A
  * @package  App\Http\Controllers
@@ -15,7 +15,7 @@ declare (strict_types = 1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Time;
+use App\Run;
 use App\Utilities;
 use \Defenestrator\Laravel5\CouchDb\CouchDbConnection;
 use DB;
@@ -23,7 +23,7 @@ use Log;
 use Illuminate\Support\Str;
 
 /**
- * This controller manages requests to add/get/update/delete time documents.
+ * This controller manages requests to add/get/update/delete run documents.
  *
  * @category A
  * @package  App\Http\Controllers
@@ -31,7 +31,7 @@ use Illuminate\Support\Str;
  * @license  https://test.com MIT
  * @link     a
  */
-class TimeController extends Controller
+class RunController extends Controller
 {
     private $_connection;
     private const CREATED = "201 Created";
@@ -46,15 +46,15 @@ class TimeController extends Controller
     }
 
     /**
-     * Records the new set of times to the database.
+     * Records the new set of runs to the database.
      *
      * @param Request $request The request containing the data
      *
      * @return void
      */
-    public function addTime(Request $request)
+    public function addRun(Request $request)
     {
-        $lapTimes = $this->_compactLapTimes($request);
+        $lapTimes = $this->_compactLapRuns($request);
         $document = [
             'id' => $this->_getUuid(),
             'runDate' => $request->input('run_date'),
@@ -66,7 +66,7 @@ class TimeController extends Controller
     }
 
     /**
-     * Gets the time and sends the time to React to be rendered to the front.
+     * Gets the run and sends the run to React to be rendered to the front.
      *
      * @param Request $request The request
      * @param string  $id      The document Id.
@@ -75,7 +75,7 @@ class TimeController extends Controller
      *                      404 error with a JSON object containing an error message
      *                      is supplied.
      */
-    public function getTimeById(Request $request, string $id)
+    public function getRunById(Request $request, string $id)
     {
         // Get the document by ID, then work on the response body
         // TODO: Use a query to find the document instead
@@ -96,31 +96,31 @@ class TimeController extends Controller
     }
 
     /**
-     * Gets all times from the design document.
+     * Gets all runs from the design document.
      *
      * @param Request $request The request object
      *
-     * @return JsonResponse The list of all time docs, or a 404 error
+     * @return JsonResponse The list of all run docs, or a 404 error
      */
-    public function getAllTimes(Request $request)
+    public function getAllRuns(Request $request)
     {
         try {
             $limit = 20;
             // Execute the design doc view
-            $query = $this->_connection->createViewQuery('times', 'times');
+            $query = $this->_connection->createViewQuery('runs', 'runs');
             $result = $query->execute()->toArray();
             // Rename the result keys for the frontend
-            $times = array_map(
-                function ($time) {
+            $runs = array_map(
+                function ($run) {
                     return [
-                        'id' => $time['id'],
-                        'runDate' => $time['key'],
-                        'lapTimes' => $time['value']
+                        'id' => $run['id'],
+                        'runDate' => $run['key'],
+                        'lapTimes' => $run['value']
                     ];
                 },
                 $result
             );
-            return response()->json($times, 200);
+            return response()->json($runs, 200);
         } catch (Excpetion $e) {
             // Send the error to the frontend
             return response()->json(['error' => $e->getMessage()], 404);
@@ -128,17 +128,17 @@ class TimeController extends Controller
     }
 
     /**
-     * Updates the existing time document.
+     * Updates the existing run document.
      *
      * @param Request $request The request containing the doc to update
      *
      * @return RedirectResponse
      */
-    public function updateTime(Request $request)
+    public function updateRun(Request $request)
     {
         // TODO: Build this
-        // Check if the time doc exists
-        // Update time, and check if the update is successful
+        // Check if the run doc exists
+        // Update run, and check if the update is successful
     }
 
     /**
@@ -164,7 +164,7 @@ class TimeController extends Controller
         $r = [];
         $v = array_values($laps);
         for ($i = 0; $i < count($v); $i += 3) {
-            array_push($r, [intval($v[$i]), intval($v[$i+1]), intval($v[$i+2])]);
+            array_push($r, [intval($v[$i]), intval($v[$i + 1]), intval($v[$i + 2])]);
         }
         return $r;
     }
@@ -172,13 +172,13 @@ class TimeController extends Controller
     /**
      * Prepares the document to be sent to React.
      *
-     * @param array $time The document
+     * @param array $run The document
      *
      * @return array
      */
-    private function _extractData(array $time)
+    private function _extractData(array $run)
     {
-        [$keys, $values] = array_divide($time, ['_id', '_rev']);
+        [$keys, $values] = array_divide($run, ['_id', '_rev']);
         array_walk(
             $keys,
             function (&$key) {
@@ -189,7 +189,7 @@ class TimeController extends Controller
     }
 
     /**
-     * Gets a UUID for creating a new time document.
+     * Gets a UUID for creating a new run document.
      * This takes Str::uuid and removes the dashes that method creates.
      *
      * @return string A UUID

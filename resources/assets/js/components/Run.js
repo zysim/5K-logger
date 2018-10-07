@@ -6,7 +6,7 @@ import TimeArray, { divide as TimeDivide } from "../timearray";
  * This component holds the list of run dates and their corresponding times.
  * @param {any} props The array of times to list out
  */
-export default class Time extends Component {
+export default class Run extends Component {
     constructor(props) {
         super(props);
         // There may be a general override for summary rendering
@@ -19,7 +19,7 @@ export default class Time extends Component {
     componentDidMount() {
         // Calculate the total and mean times once it's mounted
         this.setState({
-            totalAndMean: this.getTotalAndMean(this.props.time.lapTimes)
+            totalAndMean: this.getTotalAndMean(this.props.run.lapTimes)
         });
     }
 
@@ -28,9 +28,9 @@ export default class Time extends Component {
     }
 
     render() {
-        const time = this.props.time;
+        const run = this.props.run;
         let view;
-        if (time.lapTimes && this.state.summarise && this.state.totalAndMean) {
+        if (run.lapTimes && this.state.summarise && this.state.totalAndMean) {
             const total = this.state.totalAndMean.total;
             const mean = this.state.totalAndMean.mean;
             // Render a view that shows total and mean times
@@ -46,10 +46,10 @@ export default class Time extends Component {
                     </div>
                 </div>
             );
-        } else if (time.lapTimes) {
+        } else if (run.lapTimes) {
             // Render a list of individual lap times
-            // time.lapTimes = [[<minutes>, <seconds>, <milliseconds>], ...]
-            view = time.lapTimes.map((t, i) => (
+            // run.lapTimes = [[<minutes>, <seconds>, <milliseconds>], ...]
+            view = run.lapTimes.map((t, i) => (
                 <div className="time_body time_body_item" key={i}>
                     <div>Lap {i}</div>
                     <div>{this.stringify(t)}</div>
@@ -61,7 +61,7 @@ export default class Time extends Component {
         }
         return (
             <div className="time_container">
-                <h4 className="time_header">{time.runDate || "Empty"}</h4>
+                <h4 className="time_header">{run.runDate || "Empty"}</h4>
                 <div>
                     <button
                         className="mx-auto"

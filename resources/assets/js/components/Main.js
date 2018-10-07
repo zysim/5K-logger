@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from "react";
 import ReactDOM from "react-dom";
 
-import AddTimeForm from "./AddTimeForm";
-import TimeList from "./TimeList";
+import AddRunForm from "./AddRunForm";
+import RunList from "./RunList";
 
 export default class Main extends Component {
     constructor(props) {
@@ -19,8 +19,8 @@ export default class Main extends Component {
     }
 
     /**
-     * This method is called in AddTimeForm, once a new run is successfully
-     * recorded. This updates the `runs` state with the new run, which `TimeList`
+     * This method is called in AddRunForm, once a new run is successfully
+     * recorded. This updates the `runs` state with the new run, which `RunList`
      * then renders.
      */
     listNewlyRecordedRun(newRunDeets) {
@@ -28,12 +28,12 @@ export default class Main extends Component {
     }
 
     render() {
-        // Check if we have times to display
+        // Check if we have runs to display
         return (
             <Fragment>
                 <div className="row">
                     <div className="col-md-8 offset-md-2">
-                        <AddTimeForm
+                        <AddRunForm
                             csrfToken={this.props.csrfToken}
                             listNewlyRecordedRun={this.listNewlyRecordedRun.bind(
                                 this
@@ -43,7 +43,7 @@ export default class Main extends Component {
                 </div>
                 <div className="row">
                     <div className="col-md-8 offset-md-2">
-                        <TimeList newRunDeets={this.state.newRunDeets} />
+                        <RunList newRunDeets={this.state.newRunDeets} />
                     </div>
                 </div>
             </Fragment>

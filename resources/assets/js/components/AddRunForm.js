@@ -4,9 +4,9 @@ import axios from "axios";
 import LapInput from "./LapInput";
 
 /**
- * This component contains the form that is used to record a new set of running
+ * This component contains the form that is used to record a new run.
  */
-export default class AddTimeForm extends Component {
+export default class AddRunForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,12 +18,12 @@ export default class AddTimeForm extends Component {
     componentDidCatch(error, info) {
         // Display fallback UI
         this.setState({ hasError: true });
+        console.error("Error caught in AddRunForm:");
         console.error(error);
-        console.error(info);
     }
 
     /**
-     * Adds a new lap to add times to
+     * Adds a new lap to add runs to
      */
     // addLap() {
     //     this.setState((prevState, prop) => ({
@@ -32,14 +32,14 @@ export default class AddTimeForm extends Component {
     // }
 
     /**
-     * Makes the post request to add a new time and stuff.
+     * Makes the post request to add a new run and stuff.
      */
-    async addTime(ev) {
+    async addRun(ev) {
         try {
             ev.preventDefault();
             const data = new FormData(ev.target);
             // Post and get the new run ID
-            const response = await axios.post("/api/add-time", data);
+            const response = await axios.post("/api/add-run", data);
             this.props.listNewlyRecordedRun(response.data);
         } catch (error) {
             throw error;
@@ -52,10 +52,10 @@ export default class AddTimeForm extends Component {
         }
         return (
             <form
-                action="/api/add-time"
+                action="/api/add-run"
                 method="post"
-                id="tracker:form__add_time"
-                onSubmit={this.addTime.bind(this)}
+                id="tracker:form__add_run"
+                onSubmit={this.addRun.bind(this)}
             >
                 <input
                     type="hidden"

@@ -14,20 +14,20 @@ use Illuminate\Http\Request;
 |
  */
 
-Route::get('/user', function(Request $request) {
+Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api', 'throttle:60,1');
 
 
-Route::middleware('auth.basic.once', 'throttle:60,1')->group(function() {
-    Route::get('/add-time', function () {
+Route::middleware('auth.basic.once', 'throttle:60,1')->group(function () {
+    Route::get('/add-run', function () {
         return redirect('home');
     });
-    Route::post('/add-time', 'TimeController@addTime')->name('addTime');
+    Route::post('/add-run', 'RunController@addRun')->name('addRun');
 
-    Route::get('/get-time', function () {
+    Route::get('/get-run', function () {
         return redirect('home');
     });
-    Route::get('/get-time/{id}', 'TimeController@getTimeById')->where('id', '^[a-zA-Z0-9]{32}$');
-    Route::get('/get-time/all', 'TimeController@getAllTimes');
+    Route::get('/get-run/{id}', 'RunController@getRunById')->where('id', '^[a-zA-Z0-9]{32}$');
+    Route::get('/get-run/all', 'RunController@getAllRuns');
 });
