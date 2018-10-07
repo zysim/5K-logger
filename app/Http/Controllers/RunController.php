@@ -107,7 +107,7 @@ class RunController extends Controller
         try {
             $limit = 20;
             // Execute the design doc view
-            $query = $this->_connection->createViewQuery('runs', 'runs');
+            $query = $this->_connection->createViewQuery('runs', 'list');
             $result = $query->execute()->toArray();
             // Rename the result keys for the frontend
             $runs = array_map(
