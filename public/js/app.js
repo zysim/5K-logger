@@ -13792,7 +13792,7 @@ var AddTimeForm = function (_Component) {
 
         _this.state = {
             hasError: false,
-            numberOfLaps: 15
+            numberOfLaps: 3
         };
         return _this;
     }
@@ -13832,25 +13832,29 @@ var AddTimeForm = function (_Component) {
 
                                 ev.preventDefault();
                                 data = new FormData(ev.target);
+                                // Post and get the new run ID
+
                                 _context.next = 5;
                                 return __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post("/api/add-time", data);
 
                             case 5:
                                 response = _context.sent;
-                                _context.next = 11;
+
+                                this.props.listNewlyRecordedRun(response.data);
+                                _context.next = 12;
                                 break;
 
-                            case 8:
-                                _context.prev = 8;
+                            case 9:
+                                _context.prev = 9;
                                 _context.t0 = _context["catch"](0);
                                 throw _context.t0;
 
-                            case 11:
+                            case 12:
                             case "end":
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[0, 8]]);
+                }, _callee, this, [[0, 9]]);
             }));
 
             function addTime(_x) {
@@ -14444,8 +14448,6 @@ var TimeList = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            // Fetch the test documents
-            // TODO: Need to fetch all documents COUCHDB DOCS
             var uri = "/api/get-time/all";
             __WEBPACK_IMPORTED_MODULE_2_axios___default.a.get(uri, {
                 headers: { "Content-Type": "application/json" }
@@ -14457,15 +14459,6 @@ var TimeList = function (_Component) {
             }).catch(function (error) {
                 throw error;
             });
-            // Promise.all(testDocuments.map(d => this.fetchDocument(d))).then(
-            //     times => {
-            //         !this.isCancelled &&
-            //             this.setState({
-            //                 times: [...times],
-            //                 isFetching: false
-            //             });
-            //     }
-            // );
         }
     }, {
         key: "componentWillUnmount",
@@ -14476,8 +14469,26 @@ var TimeList = function (_Component) {
     }, {
         key: "componentDidCatch",
         value: function componentDidCatch(error, info) {
-            console.error("TimeList error:", error, info);
+            console.error("TimeList caught an error:");
+            console.error(error);
             this.setState({ isFetching: false, hasError: true });
+        }
+    }, {
+        key: "componentDidUpdate",
+        value: function componentDidUpdate(prevProps) {
+            var _this3 = this;
+
+            // Push the newly-added run to the list
+            var currentRunDeets = this.props.newRunDeets;
+            if (prevProps.newRunDeets.id !== currentRunDeets.id) {
+                this.fetchDocument(currentRunDeets.id).then(function (run) {
+                    !_this3.isCancelled && _this3.setState(function (prevState) {
+                        return {
+                            times: prevState.times.concat(run)
+                        };
+                    });
+                });
+            }
         }
     }, {
         key: "render",
@@ -14494,7 +14505,8 @@ var TimeList = function (_Component) {
             if (this.state.isFetching) {
                 return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__LoadingSpinner__["a" /* default */], null);
             }
-            var times = this.state.times;
+            // Check if times exist and has elements to show
+            var times = this.state.times && this.state.times.length > 0 ? this.state.times : null;
             return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
                 "div",
                 { className: "card", id: "time_list_container" },
@@ -14508,7 +14520,7 @@ var TimeList = function (_Component) {
                     { className: "card-body", id: "time_list_body" },
                     times && times.map(function (time, i) {
                         return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Time__["default"], { time: time, key: i });
-                    }) || ""
+                    }) || "No times to show"
                 )
             );
         }
@@ -39310,7 +39322,8 @@ var Main = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 
         _this.state = {
-            hasError: false
+            hasError: false,
+            newRunDeets: {}
         };
         return _this;
     }
@@ -39320,6 +39333,18 @@ var Main = function (_Component) {
         value: function componentDidCatch(error, info) {
             console.error("Error received:", error, info);
             this.setState({ hasError: true });
+        }
+
+        /**
+         * This method is called in AddTimeForm, once a new run is successfully
+         * recorded. This updates the `runs` state with the new run, which `TimeList`
+         * then renders.
+         */
+
+    }, {
+        key: "listNewlyRecordedRun",
+        value: function listNewlyRecordedRun(newRunDeets) {
+            this.setState({ newRunDeets: newRunDeets });
         }
     }, {
         key: "render",
@@ -39334,7 +39359,10 @@ var Main = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "div",
                         { className: "col-md-8 offset-md-2" },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__AddTimeForm__["default"], { csrfToken: this.props.csrfToken })
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__AddTimeForm__["default"], {
+                            csrfToken: this.props.csrfToken,
+                            listNewlyRecordedRun: this.listNewlyRecordedRun.bind(this)
+                        })
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -39343,7 +39371,7 @@ var Main = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         "div",
                         { className: "col-md-8 offset-md-2" },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__TimeList__["default"], null)
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__TimeList__["default"], { newRunDeets: this.state.newRunDeets })
                     )
                 )
             );
@@ -39360,7 +39388,7 @@ var root = document.getElementById("main");
 var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
 if (root) {
-    __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Main, { csrfToken: csrfToken, times: root.getAttribute("data-times") }), root);
+    __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(Main, { csrfToken: csrfToken }), root);
 }
 
 /***/ }),

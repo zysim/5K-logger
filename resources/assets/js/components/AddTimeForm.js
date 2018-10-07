@@ -38,7 +38,9 @@ export default class AddTimeForm extends Component {
         try {
             ev.preventDefault();
             const data = new FormData(ev.target);
+            // Post and get the new run ID
             const response = await axios.post("/api/add-time", data);
+            this.props.listNewlyRecordedRun(response.data);
         } catch (error) {
             throw error;
         }

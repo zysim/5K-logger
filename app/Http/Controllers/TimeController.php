@@ -60,8 +60,9 @@ class TimeController extends Controller
             'runDate' => $request->input('run_date'),
             'lapTimes' => $lapTimes
         ];
-        $this->_connection->postDocument($document);
+        [$id, $rev] = $this->_connection->postDocument($document);
         // TODO: check for errors
+        return response()->json(['id' => $id, 'rev' => $rev]);
     }
 
     /**
@@ -112,6 +113,7 @@ class TimeController extends Controller
             $times = array_map(
                 function ($time) {
                     return [
+                        'id' => $time['id'],
                         'runDate' => $time['key'],
                         'lapTimes' => $time['value']
                     ];
@@ -176,7 +178,7 @@ class TimeController extends Controller
      */
     private function _extractData(array $time)
     {
-        [$keys, $values] = array_divide(array_except($time, ['_id', '_rev']));
+        [$keys, $values] = array_divide($time, ['_id', '_rev']);
         array_walk(
             $keys,
             function (&$key) {

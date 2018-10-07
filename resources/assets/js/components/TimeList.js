@@ -32,8 +32,6 @@ export default class TimeList extends Component {
     }
 
     componentDidMount() {
-        // Fetch the test documents
-        // TODO: Need to fetch all documents COUCHDB DOCS
         const uri = "/api/get-time/all";
         axios
             .get(uri, {
@@ -57,8 +55,22 @@ export default class TimeList extends Component {
     }
 
     componentDidCatch(error, info) {
-        console.error("TimeList error:", error, info);
+        console.error("TimeList caught an error:");
+        console.error(error);
         this.setState({ isFetching: false, hasError: true });
+    }
+
+    componentDidUpdate(prevProps) {
+        // Push the newly-added run to the list
+        const currentRunDeets = this.props.newRunDeets;
+        if (prevProps.newRunDeets.id !== currentRunDeets.id) {
+            this.fetchDocument(currentRunDeets.id).then(run => {
+                !this.isCancelled &&
+                    this.setState(prevState => ({
+                        times: prevState.times.concat(run)
+                    }));
+            });
+        }
     }
 
     render() {
@@ -70,7 +82,11 @@ export default class TimeList extends Component {
         if (this.state.isFetching) {
             return <LoadingSpinner />;
         }
-        const times = this.state.times;
+        // Check if times exist and has elements to show
+        const times =
+            this.state.times && this.state.times.length > 0
+                ? this.state.times
+                : null;
         return (
             <div className="card" id="time_list_container">
                 <div className="card-header" id="time_list_header">
@@ -79,7 +95,7 @@ export default class TimeList extends Component {
                 <div className="card-body" id="time_list_body">
                     {(times &&
                         times.map((time, i) => <Time time={time} key={i} />)) ||
-                        ""}
+                        "No times to show"}
                 </div>
             </div>
         );
