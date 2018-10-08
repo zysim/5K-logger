@@ -28,6 +28,9 @@ Route::middleware('auth.basic.once', 'throttle:60,1')->group(function () {
     Route::get('/get-run', function () {
         return redirect('home');
     });
-    Route::get('/get-run/{id}', 'RunController@getRunById')->where('id', '^[a-zA-Z0-9]{32}$');
     Route::get('/get-run/all', 'RunController@getAllRuns');
+
+    Route::post('/delete-run', 'RunController@deleteRun');
+
+    Route::post('/edit-run', 'RunController@editRun');
 });

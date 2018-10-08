@@ -1,1 +1,0 @@
-{"_id":"_design/runs","views":{"list":{"map":"function(doc){ if(doc.runDate && doc.lapTimes) emit(doc.runDate, doc.lapTimes)}"}}}
