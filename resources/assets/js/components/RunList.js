@@ -3,28 +3,30 @@ import axios from "axios";
 
 import Run from "./Run";
 import LoadingSpinner from "./LoadingSpinner";
+import { arrayOrBust } from "../utilities";
 
 export default class RunList extends Component {
     /**
      * This fetches a document with `id`.
      *
      * @param string id The ID of the Run document to fetch
+     * @deprecated This is now deprecated as the route does not exist anymore
      */
-    async fetchDocument(id) {
-        try {
-            const response = await axios.get(`/api/get-run/${id}`, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            const run = response.data;
-            return run;
-        } catch (error) {
-            !this.isCancelled &&
-                this.setState({ isFetching: false, hasError: true });
-            throw error;
-        }
-    }
+    // async fetchDocument(id) {
+    //     try {
+    //         const response = await axios.get(`/api/get-run/${id}`, {
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             }
+    //         });
+    //         const run = response.data;
+    //         return run;
+    //     } catch (error) {
+    //         !this.isCancelled &&
+    //             this.setState({ isFetching: false, hasError: true });
+    //         throw error;
+    //     }
+    // }
 
     constructor(props) {
         super(props);
@@ -83,10 +85,7 @@ export default class RunList extends Component {
             return <LoadingSpinner />;
         }
         // Check if runs exist and has elements to show
-        const runs =
-            this.state.runs && this.state.runs.length > 0
-                ? this.state.runs
-                : null;
+        const runs = arrayOrBust(this.state.runs);
         return (
             <div className="card" id="run_list_container">
                 <div className="card-header" id="run_list_header">
