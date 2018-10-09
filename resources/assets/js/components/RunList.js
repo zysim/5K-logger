@@ -3,7 +3,7 @@ import axios from "axios";
 
 import Run from "./Run";
 import LoadingSpinner from "./LoadingSpinner";
-import { arrayOrBust } from "../utilities";
+import utilities from "../utilities";
 
 export default class RunList extends Component {
     /**
@@ -47,7 +47,14 @@ export default class RunList extends Component {
                     });
             })
             .catch(error => {
-                throw error;
+                console.error(
+                    `Error fetching runs:\n ${error.name}: ${error.message}`
+                );
+                !this.isCancelled &&
+                    this.setState({
+                        isFetching: false,
+                        hasError: true
+                    });
             });
     }
 
@@ -57,7 +64,7 @@ export default class RunList extends Component {
     }
 
     componentDidCatch(error, info) {
-        console.error("RunList caught an error:");
+        console.error("Error caught in RunList boundary:");
         console.error(error);
         this.setState({ isFetching: false, hasError: true });
     }
@@ -85,7 +92,7 @@ export default class RunList extends Component {
             return <LoadingSpinner />;
         }
         // Check if runs exist and has elements to show
-        const runs = arrayOrBust(this.state.runs);
+        const runs = utilities.arrayOrBust(this.state.runs);
         return (
             <div className="card" id="run_list_container">
                 <div className="card-header" id="run_list_header">
@@ -93,7 +100,7 @@ export default class RunList extends Component {
                 </div>
                 <div className="card-body" id="run_list_body">
                     {(runs &&
-                        runs.map((run, i) => <Run run={run} key={i} />)) ||
+                        runs.map(run => <Run run={run} key={run.id} />)) ||
                         "No runs to show"}
                 </div>
             </div>

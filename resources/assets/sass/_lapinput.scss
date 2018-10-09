@@ -1,0 +1,41 @@
+$minute: $red;
+$second: $cyan;
+$millisecond: $teal;
+$focus-background: 0.6;
+$focus-background-fade: background-color 0.5s ease-out;
+
+.run_time_input {
+    border: none;
+    max-width: 100px;
+
+    &.run_time_input_minute {
+        border-bottom: 1px solid $minute;
+        transition: $focus-background-fade;
+
+        &:focus {
+            background-color: rgba($minute, $focus-background);
+        }
+    }
+
+    &.run_time_input_second {
+        border-bottom: 1px solid $second;
+        transition: $focus-background-fade;
+
+        &:focus {
+            background-color: rgba($second, $focus-background);
+        }
+    }
+
+    &.run_time_input_millisecond {
+        border-bottom: 1px solid $millisecond;
+        transition: $focus-background-fade;
+
+        &:focus {
+            background-color: rgba($millisecond, $focus-background);
+        }
+    }
+
+    & + span {
+        color: grey;
+    }
+}

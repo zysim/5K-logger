@@ -14,7 +14,7 @@ export default class Main extends Component {
     }
 
     componentDidCatch(error, info) {
-        console.error("Error received:", error, info);
+        console.error("Error caught in Main's boundary:", error, info);
         this.setState({ hasError: true });
     }
 

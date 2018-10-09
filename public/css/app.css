@@ -10581,6 +10581,45 @@ a.text-dark:focus {
   }
 }
 
+.run_time_input {
+  border: none;
+  max-width: 100px;
+}
+
+.run_time_input.run_time_input_minute {
+  border-bottom: 1px solid #e3342f;
+  -webkit-transition: background-color 0.5s ease-out;
+  transition: background-color 0.5s ease-out;
+}
+
+.run_time_input.run_time_input_minute:focus {
+  background-color: rgba(227, 52, 47, 0.6);
+}
+
+.run_time_input.run_time_input_second {
+  border-bottom: 1px solid #6cb2eb;
+  -webkit-transition: background-color 0.5s ease-out;
+  transition: background-color 0.5s ease-out;
+}
+
+.run_time_input.run_time_input_second:focus {
+  background-color: rgba(108, 178, 235, 0.6);
+}
+
+.run_time_input.run_time_input_millisecond {
+  border-bottom: 1px solid #4dc0b5;
+  -webkit-transition: background-color 0.5s ease-out;
+  transition: background-color 0.5s ease-out;
+}
+
+.run_time_input.run_time_input_millisecond:focus {
+  background-color: rgba(77, 192, 181, 0.6);
+}
+
+.run_time_input + span {
+  color: grey;
+}
+
 #run_list_container {
   display: grid;
 }

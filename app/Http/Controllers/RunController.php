@@ -14,13 +14,14 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App;
 use App\Run;
 use App\Utilities;
 use DB;
 use Exception;
-use Log;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Log;
 
 /**
  * This controller manages requests to add/get/edit/delete run documents.
@@ -136,7 +137,7 @@ class RunController extends Controller
         return [
             'id' => $doc['id'],
             'runDate' => $doc['key'],
-            'lapTimes' => $doc['lapTimes']
+            'lapTimes' => $doc['value']
         ];
     }
 
@@ -239,7 +240,6 @@ class RunController extends Controller
     public function getAllRuns(Request $request)
     {
         try {
-            Log::debug($request->query('test'));
             // Execute the design doc view
             $query = $this->_client->createViewQuery('runs', 'list');
             $result = $query->execute();
@@ -257,6 +257,9 @@ class RunController extends Controller
                 },
                 $result->toArray()
             );
+            if (App::environment('local')) {
+                Log::debug('Querying successful');
+            }
             return response()->json($runs, 200);
         } catch (Exception $e) {
             return Utilities::exceptionJsonResponse($e);

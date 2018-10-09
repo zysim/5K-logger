@@ -4,6 +4,7 @@ namespace App;
 
 use DB;
 use Exception;
+use Log;
 
 class Utilities
 {
@@ -49,6 +50,8 @@ class Utilities
      */
     public static function exceptionJsonResponse(Exception $e)
     {
-        return response()->json(['error' => $e->getMessage()], $e->getCode());
+        Log::error($e->getCode() . ": " . $e->getMessage());
+        $code = $e->getCode() >= 400 ? $e->getCode() : 500;
+        return response()->json(['error_message' => $e->getMessage()], $code);
     }
 }
